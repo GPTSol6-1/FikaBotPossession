@@ -1,22 +1,20 @@
 # Fika Bot Possession 1.0.0
 
-# One bad peek. A whole raid left to play.
+# Stay in the raid with your friends.
 
-Your PMC is down. Your friends are still fighting. Somewhere nearby, a scav is walking around with a perfectly usable body.
+**Multiplayer bot possession for Fika.** When your PMC dies or extracts, take control of a living bot and jump back into the same raid with the other players. Your friends keep playing, you get a new body, and the action carries on together.
 
-**Borrow it.**
+Fika Bot Possession is built around a shared multiplayer raid: your possessed character moves, fights and interacts in the same world as everyone else. Other players see your new body and its actions through Fika's networking, while you use your normal Tarkov controls, first-person weapons, HUD, inventory and looting interface.
 
-Fika Bot Possession lets you jump out of spectator freecam and into a living bot. Find your next pair of boots, press **F6**, and get back into the raid with that bot's gear, weapons, ammunition and remaining health. Your usual Tarkov controls take over: aim, fire, reload, open your inventory, search containers and use medicine through the game's native interfaces.
+Get dropped early? Open spectator freecam, aim at a living armed bot and press **F6**. Its gear, ammunition and remaining health become your next loadout. A scav with a battered rifle can become your next chance to get back into the fight while your friends are still in the raid.
 
-No remote-control panel. No second set of movement keys. Just a different body and whatever it has in its pockets.
+## Multiplayer comes first
 
-## Back in the fight
-
-- **Pick your next perspective.** After death or extraction, aim your free camera at a living armed bot and request a takeover. A small on-screen hint shows your configured key.
-- **Play the character you're given.** Its equipment and current stored health come with it. That battered scav kit is your new loadout.
-- **Use familiar controls.** First-person weapons, HUD, inventory grids, item actions and looting use native Tarkov systems.
-- **Keep the session going.** When a possessed body dies, return to freecam and look for another opportunity while the raid remains active.
-- **Built for private Fika sessions.** The dedicated headless host coordinates each handoff and prevents two players from claiming the same bot.
+- **Rejoin the ongoing action.** Take over after death or extraction without waiting for your friends to finish the raid.
+- **Share the same fight.** Your controlled character exists in the multiplayer raid alongside the other human players.
+- **Possess different bots.** The headless host coordinates handoffs and prevents players from claiming the same bot at once.
+- **Use native Tarkov controls.** Aim, shoot, reload, manage equipment, use medicine and loot through the familiar interfaces.
+- **Try another body.** On death, return to freecam and look for another opportunity while the raid remains active.
 
 ## Get started
 
@@ -56,3 +54,4 @@ Built with SPT, Fika, BepInEx and Harmony. Code and documentation developed with
 See BUILD.md for build instructions. This plugin targets SPT 4.1.6 / EFT 0.16.9.5.40743 and Fika.Core 2.4.6.0. Compiled source is in v2/.
 
 The latest pre-release code passed clean SPT/Fika testing with required dependencies according to the user. The 1.0.0 build changes release metadata only. Release build passed with zero warnings/errors; existing checks passed 26,303 protocol assertions, 357 presentation-double assertions and 51 dependency-contract checks. Those checks do not simulate Unity gameplay. See VALIDATION.md for detailed test scope and remaining coverage.
+
