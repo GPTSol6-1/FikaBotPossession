@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+ <PropertyGroup><TargetFramework>net10.0</TargetFramework><OutputType>Exe</OutputType><TreatWarningsAsErrors>true</TreatWarningsAsErrors></PropertyGroup>
+ <PropertyGroup><PresentationSource Condition="'$(PresentationSource)' == ''">../v2/Presentation.cs</PresentationSource></PropertyGroup>
+ <ItemGroup><Compile Include="$(PresentationSource)" Link="Presentation.cs" /></ItemGroup>
+</Project>

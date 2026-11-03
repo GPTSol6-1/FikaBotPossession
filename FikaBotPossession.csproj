@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <AssemblyName>SPT.Diagnostics.FikaBotPossession</AssemblyName>
+    <Version>1.0.0</Version>
+    <GameRoot Condition="'$(GameRoot)' == ''">$(MSBuildThisFileDirectory)..\client</GameRoot>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="v2\*.cs" />
+    <Reference Include="$(GameRoot)\EscapeFromTarkov_Data\Managed\*.dll" Exclude="$(GameRoot)\EscapeFromTarkov_Data\Managed\mscorlib.dll;$(GameRoot)\EscapeFromTarkov_Data\Managed\netstandard.dll;$(GameRoot)\EscapeFromTarkov_Data\Managed\System*.dll;$(GameRoot)\EscapeFromTarkov_Data\Managed\Mono*.dll">
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="BepInEx" HintPath="$(GameRoot)\BepInEx\core\BepInEx.dll" Private="false" />
+    <Reference Include="0Harmony" HintPath="$(GameRoot)\BepInEx\core\0Harmony.dll" Private="false" />
+    <Reference Include="Fika.Core" HintPath="$(GameRoot)\BepInEx\plugins\Fika\Fika.Core.dll" Private="false" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+ <PropertyGroup><TargetFramework>net10.0</TargetFramework><OutputType>Exe</OutputType><TreatWarningsAsErrors>true</TreatWarningsAsErrors></PropertyGroup>
+ <ItemGroup>
+  <Compile Include="..\v2\TransferGate.cs" Link="TransferGate.cs" />
+  <Compile Include="..\v2\Wire.cs" Link="Wire.cs" />
+  <Reference Include="Fika.Core" HintPath="..\..\client\BepInEx\plugins\Fika\Fika.Core.dll" />
+ </ItemGroup>
+</Project>

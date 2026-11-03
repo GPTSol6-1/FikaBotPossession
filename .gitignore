@@ -1,0 +1,8 @@
+bin/
+obj/
+build/
+tests/bin/
+tests/obj/
+
+presentation-tests/bin/
+presentation-tests/obj/
