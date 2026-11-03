@@ -67,6 +67,25 @@ try {
     Require-Member $fika 'Fika.Core.Main.ClientClasses.ClientQuestController' '_canSendAndReceive' 'Field'
     Require-Member $fika 'Fika.Core.Main.ClientClasses.ClientSharedQuestController' '_acceptedTypes' 'Field'
     Require-Member $game 'EFT.Player' 'InitVaultingAudioControllers'
+    Require-Member $game 'EFT.Player' 'set_Location'
+    foreach ($name in @('Update','ToggleNamePlate')) { Require-Member $fika 'Fika.Core.Main.Components.FikaHealthBar' $name }
+    Require-Member $fika 'Fika.Core.Main.Components.FikaHealthBar' '_playerPlate' 'Field'
+    $mapsPath=Join-Path $GameRoot 'BepInEx/plugins/mpstark-dynamicmaps/DynamicMaps.dll'
+    if(Test-Path $mapsPath) {
+        $maps=[Mono.Cecil.AssemblyDefinition]::ReadAssembly($mapsPath)
+        try {
+            foreach($entry in @(
+                @('DynamicMaps.Plugin','Instance','Field'), @('DynamicMaps.Plugin','Map','Field'),
+                @('DynamicMaps.UI.ModdedMapScreen','_dynamicMarkerProviders','Field'),
+                @('DynamicMaps.UI.ModdedMapScreen','_isShown','Field'),
+                @('DynamicMaps.UI.ModdedMapScreen','Show','Method'),
+                @('DynamicMaps.DynamicMarkers.PlayerMarkerProvider','_playerMarker','Field'),
+                @('DynamicMaps.DynamicMarkers.PlayerMarkerProvider','TryAddMarker','Method'),
+                @('DynamicMaps.UI.Components.PlayerMapMarker','set_Player','Method'))) {
+                Require-Member $maps $entry[0] $entry[1] $entry[2]
+            }
+        } finally { $maps.Dispose() }
+    }
     "PASS: $checks member/native-path checks; Fika.Core $($fika.Name.Version)."
     'This validates metadata and native call references, not Harmony installation or gameplay.'
 }

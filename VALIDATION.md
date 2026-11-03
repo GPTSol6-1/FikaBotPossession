@@ -1,3 +1,24 @@
+# 1.0.1 release validation — 2026-11-03
+
+User tested the revised build and confirms F7 kills the possessed bot, preserves its corpse and allows looting. Scoped sensitivity is also confirmed working. Earlier user testing confirmed Dynamic Maps is fixed, freecam return works and another possession succeeds. These are user-reported runtime results, not independent observation of every scope or multiplayer/last-player scenario. Plate visibility was not separately reported.
+
+Release checks: clean Release build; 26,303 protocol assertions; 357 presentation assertions; 43 compatibility lifecycle assertions; 63 installed contract checks; two compiled F7 dispatch/native-death checks. Test doubles and metadata do not execute Unity/Harmony. Remaining coverage includes every-player-freecam takeover, inconsistent AI targeting, peer/owner looting matrix, last living possessed body and broad scope/mod combinations.
+
+The development checklist below is historical; its pending claims are superseded by the confirmed results above only for the reported scenarios.
+# 1.0.1 development candidate — 2026-11-03
+
+Build: Release, zero warnings/errors. Checks: protocol 26,303; presentation doubles 357; new compatibility doubles 30; installed metadata/native-path checks 63 (including optional Dynamic Maps). Compatibility tests cover absent Dynamic Maps, existing and late-created plates, settings callbacks, restoring current settings, cached/recreated self markers, repeated possessions and refreshing only visible maps. They do not run Unity or Harmony. No installed/configuration changes or process control. Source backup: backups/FikaBotPossession/source-1.0.0-before-exit-overlays-maps.
+
+Fresh-raid test required on matching human/headless candidate versions:
+
+1. Possess while another human remains alive. Verify their name, health bar and effect/limb plate details are absent from the controller's view, including a late join or settings change. Other clients should retain their own normal display.
+2. Press F7 (or the configured shortcut). Verify a third-person ragdoll and inventory remain on owner, peers and headless, control returns to freecam, then possess another bot and loot the previous body. Have another human loot it too. Verify Fika's spectator-exit key can leave the raid. Repeat when the possessed body is the last living controlled character while the raid remains active. Check a second possession and ordinary death still restore controls and plates. Raid-menu Leave/disconnect remain separate despawn actions.
+3. In Factory or another non-Customs map, open Dynamic Maps before possession. After possession, verify labels, extract markers, position, heading and floor selection. Press M, close M, and toggle minimap/peek: the selected map must remain correct, and no dropdown may remain floating. Repeat with the map initially hidden and with another possession. Existing manual map/artwork selection may reset to the native first matching map on visible-map refresh; check this behavior too.
+4. Return to freecam by F7 and by ordinary death; check the marker is restored and there are no stale temporary-body Transform errors. Repeat without Dynamic Maps installed in a separate test environment. Check original human raid results are unchanged.
+5. With FOV Fix and Change Mouse Sensitivity enabled, compare the same weapon/scope on a normal human and possessed body: hip fire, iron/red dot, low/high magnification, variable zoom and toggle zoom. Confirm expected scaling and return-to-freecam behavior across repeated possession, ordinary death and F7. Repeat without FOV Fix in a separate environment to check native sensitivity. Earlier candidate's Dynamic Maps correction was confirmed by user; F7 native death and FOV binding changes are unverified in game.
+
+Missing Location is a concrete code defect consistent with the wrong map/selector. Cached marker binding is a separate integration gap. Marker/text disappearance and dropdown persistence are not yet independently reproduced or proven fixed. Alternative causes include Dynamic Maps UI lifecycle behavior or another UI mod; investigate the first failing UI transition if this candidate does not resolve them. Evidence: diagnostics/bot-possession-101-2026-11-03.md.
+
 # 1.0.0 release preparation — 2026-11-03
 
 User reports latest code passed on a clean SPT/Fika installation with only documented dependencies. This is user-reported runtime evidence for the pre-release code, not an independent runtime test of the 1.0.0 metadata rebuild. Known limitations below remain disclosed.
@@ -46,5 +67,6 @@ The user clarified that their own former body floated, lacked normal body presen
 **Still uncertain:** whether this render transition fully resolves floating/interaction behavior. No runtime measurements of the broken corpse's local collider or inventory registration were captured. The new diagnostics establish construction state; they cannot prove lootability. Retest by dying in a possessed body, possessing another bot and looting the prior corpse on the owner client while another human compares items and body appearance. Check exists=True/ragdoll=True/body view=ThirdPerson and verify actual item transfers.
 
 0.2.4 Release build zero warnings/errors, existing 26,303 protocol and 357 presentation-double assertions pass; 46 member plus three native-call checks pass. Those tests do not execute corpse rendering/physics/loot interaction. No installation or process changes were made. Source baseline preserved at backups/FikaBotPossession/source-0.2.3-before-local-corpse-view.
+
 
 

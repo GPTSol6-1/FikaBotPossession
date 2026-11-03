@@ -75,6 +75,9 @@ internal sealed class LocalCharacter : IDisposable
         }
         // Fika's normal factory uses the human nickname. Retain the bot identity.
         player.Profile.Info.SetProfileNickname(nickname);
+        // Normal raid spawning assigns Location after Create; mid-raid bodies
+        // bypass that path. Dynamic Maps uses it to select the current map.
+        player.Location=Original.Location;
         if(player.QuestController is ClientQuestController quests)
         {
             quests.ToggleSend(false);
@@ -158,6 +161,7 @@ internal sealed class LocalCharacter : IDisposable
         Player.PacketSender.Init();
         owner.vmethod_0();
         owner.Mute(!Application.isFocused);
+        p.Guard(()=>PossessionCompatibility.Begin(Player,Original));
         // Initial equip uses the same network request/callback path as normal play.
         var item=Player.Inventory.Equipment.GetAllItems().FirstOrDefault(x=>x.Id.ToString()==frame.HeldItem);
         if(item is Weapon weapon) Player.Proceed(weapon,null,false);
@@ -189,6 +193,7 @@ internal sealed class LocalCharacter : IDisposable
         if(disposed) return; disposed=true; cancellation.Cancel();
         // Every restoration is attempted even if one subsystem has already torn down.
         void Try(Action action) { try { action(); } catch(Exception e) { p.Error(e); } }
+        Try(PossessionCompatibility.Restore);
         if(owner!=null)
         {
             Try(()=>owner.Mute(true)); Try(()=>owner.vmethod_1());

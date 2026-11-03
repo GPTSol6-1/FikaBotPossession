@@ -1,4 +1,4 @@
-# Fika Bot Possession 1.0.0
+# Fika Bot Possession 1.0.1
 
 # Stay in the raid with your friends.
 
@@ -32,9 +32,13 @@ Keep another player alive so the raid continues. Takeover after everyone is dead
 
 Possession is for staying in the action. **It does not save the temporary character's loot, quests or progression to your original PMC.** Your original character keeps its own raid result.
 
-This release uses a **one-way handoff**: a living possessed character cannot be handed back to AI. Normal death creates a corpse and returns you to freecam; temporary characters do not use Fika's human downed/revive system. Corpse creation is confirmed in user testing, while detailed controller-side corpse-looting coverage remains pending.
+This release uses a **one-way handoff**: a living possessed character cannot be handed back to AI. Normal death creates a corpse and returns you to freecam; temporary characters do not use Fika's human downed/revive system. User testing confirms corpse creation and looting after F7.
 
-**Choosing Leave despawns the possessed body and everything it carries.** Disconnecting, losing the controller heartbeat, disabling possession or ending the raid also retires it. Fika's spectator extraction shortcut is blocked while possessing: use Leave to return to freecam first, then exit as a spectator.
+**Press F7 to kill the possessed character and return to freecam, leaving its corpse and inventory for looting.** The shortcut is configurable under Controls -> End possession in BepInEx settings and remains visible on screen while controlling a body. Native death and Fika synchronization handle the corpse; user testing confirms F7 preserves a lootable body. The raid menu's Leave action requests retirement instead. Disconnecting, losing the controller heartbeat, disabling possession or ending the raid also retires the body. Fika's spectator extraction shortcut is blocked while possessing: end possession first, then exit as a spectator.
+
+Optional FOV Fix support redirects its cached aim/optic player during possession and restores it afterward, so its configured scope sensitivity follows the controlled weapon. User testing confirms the scope sensitivity correction works. FOV Fix is not required.
+
+During possession, Fika teammate names and health plates are hidden on your client; your configured display resumes on return to freecam. Dynamic Maps integration supplies the temporary body's raid location, refreshes an already visible map and redirects its main-player marker. User testing confirms the reported Dynamic Maps bugs are fixed.
 
 Stationary snipers, simplified-skeleton bots, unarmed bots and bots using stationary weapons or vehicles cannot be selected. Fika map culling is temporarily disabled when necessary during possession and restored afterward; this can increase rendering cost.
 
@@ -53,5 +57,5 @@ Built with SPT, Fika, BepInEx and Harmony. Code and documentation developed with
 
 See BUILD.md for build instructions. This plugin targets SPT 4.1.6 / EFT 0.16.9.5.40743 and Fika.Core 2.4.6.0. Compiled source is in v2/.
 
-The latest pre-release code passed clean SPT/Fika testing with required dependencies according to the user. The 1.0.0 build changes release metadata only. Release build passed with zero warnings/errors; existing checks passed 26,303 protocol assertions, 357 presentation-double assertions and 51 dependency-contract checks. Those checks do not simulate Unity gameplay. See VALIDATION.md for detailed test scope and remaining coverage.
+The published 1.0.0 behavior passed clean SPT/Fika testing with required dependencies according to the user. The 1.0.1 candidate builds with zero warnings/errors and passes 26,303 protocol assertions, 357 presentation-double assertions, 30 compatibility-double assertions and 63 dependency-contract checks with the installed optional Dynamic Maps assembly. These checks do not simulate Unity gameplay. See VALIDATION.md for the new runtime test sequence and historical coverage.
 

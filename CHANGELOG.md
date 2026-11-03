@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.1 — 2026-11-03
+
+- Add a configurable End possession shortcut (F7 by default) and a persistent on-screen hint. F7 now kills the possessed character through native health/death handling, retaining the corpse and inventory before returning to freecam. This replaces the earlier candidate's despawn behavior, per user feedback. Raid-menu Leave and disconnect cleanup still retire the temporary body. Original-character persistence is unchanged.
+- Add optional FOV Fix compatibility: bind its cached player to the possessed character while its controller updates, then restore the previous binding on return. Its ADS/optic watchers otherwise continue reading the original human, preventing the configured magnification sensitivity scaling. User confirmed scope sensitivity now works.
+- Hide Fika player names, health bars and associated plate information on the controlling client during possession. Apply native nameplate settings again on return, including configuration changes made during possession.
+- Assign the current raid Location to the temporary player, which bypasses normal raid spawning. Dynamic Maps reads this value when selecting maps; an unset value can expose unrelated maps and a map selector.
+- Add optional Dynamic Maps compatibility: refresh an already visible map through its native lifecycle, rebind its cached main-player marker to the possessed body and restore it afterward. Hidden maps remain closed. Dynamic Maps is not a required dependency.
+- User confirmed Dynamic Maps is fixed, F7 kills the possessed character and preserves a lootable corpse, and scope sensitivity scales correctly. Earlier testing also confirmed return to freecam and subsequent possession. This does not establish every scope, last-player or multiplayer-looting scenario.
+- Release build, 26,303 protocol assertions, 357 presentation assertions, 43 compatibility lifecycle assertions with doubles and 63 installed dependency checks pass. These are development checks alongside the user-reported runtime results above.
+
 ## 1.0.0 — 2026-11-03 — first public release
 
 - Release the locally owned bot takeover implementation developed and tested in 0.2.0–0.2.5: normal Tarkov controls, first-person camera, weapons, HUD, native inventory and looting.

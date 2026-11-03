@@ -33,7 +33,7 @@ internal sealed class Client
     {
         if(!BlockRaidExit) return true;
         if(Fika.Core.FikaPlugin.Instance.Settings.ExtractKey.Value.IsDown())
-            Note("End possession through the raid menu before using spectator extraction.");
+            Note($"Press {p.EndKey.Value} to end possession, then use spectator extraction.");
         return false;
     }
     float pendingUntil,nextHeartbeat,messageUntil;
@@ -71,7 +71,7 @@ internal sealed class Client
                 if(transfer.Local!=null)
                 {
                     Controlled=transfer.Local; Controlled.Start(); nextHeartbeat=0;
-                    Note("Bot takeover active. Normal controls and inventory. Leave through the raid menu to end possession.");
+                    Note($"Bot takeover active. {p.EndKey.Value}: kill possessed character and return to freecam.");
                 }
                 p.Info($"Handoff {q.Token}: client committed entity {q.Entity}.");
             }
@@ -132,6 +132,7 @@ internal sealed class Client
         if(pending && Time.unscaledTime>pendingUntil) { pending=false; Note("No handoff response from host."); }
         if(mine!=null)
         {
+            if(mine.Committed && Application.isFocused && p.EndKey.Value.IsDown()) KillControlled();
             if(mine.Committed && Time.unscaledTime>=nextHeartbeat)
             {
                 nextHeartbeat=Time.unscaledTime+1;
@@ -156,9 +157,22 @@ internal sealed class Client
         Note("Preparing local player handoff…");
     }
     internal void Focus(bool focused) => Controlled?.Focus(focused);
+    void KillControlled()
+    {
+        var body=Controlled?.Player;
+        if(mine?.Committed!=true || Controlled?.Active!=true || body?.HealthController.IsAlive!=true) return;
+        p.Info($"F7 death requested for temporary entity {body.NetId}; retaining native corpse and inventory.");
+        // Let native death create/synchronize the corpse before the existing
+        // host death monitor closes the handoff. Failed would despawn it.
+        body.ActiveHealthController.Kill(EDamageType.Undefined);
+    }
     internal void RequestEnd()
     {
-        if(mine!=null) Send(mine.Frame,CommandKind.Failed,"Controller left possession; temporary body retired");
+        if(mine!=null)
+        {
+            Send(mine.Frame,CommandKind.Failed,"Controller left possession; temporary body retired");
+            Note("Ending possession; waiting for host. Body and items will despawn.");
+        }
     }
     static HandoffCommand Command(HandoffFrame q,CommandKind kind) => new()
         {Kind=kind,Human=q.Human,Bot=q.Bot,Entity=q.Entity,Token=q.Token};
@@ -170,6 +184,8 @@ internal sealed class Client
     internal void Draw()
     {
         string text=Time.unscaledTime<messageUntil && message.Length>0 ? message : "";
+        if(Controlled?.Active==true)
+            text=$"{p.EndKey.Value}: kill possessed character and return to freecam (body remains lootable).";
         if(text.Length==0 && p.Network!=null && !p.Headless && mine==null && !pending && p.Eligible(p.Coop?.MyPlayer)
             && CameraManager.Exist && CameraManager.Instance.Camera.GetComponent<FikaCamera>()?.IsActive==true)
             text=$"Aim at a living bot and press {p.TakeKey.Value} to take control.";

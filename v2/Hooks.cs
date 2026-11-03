@@ -45,6 +45,7 @@ internal static class Hooks
         Add(h,AccessTools.Method(typeof(CameraManager),"SetCameraFromSettings"),nameof(KeepRaidCamera));
         Add(h,AccessTools.Method(typeof(Fika.Core.Main.FreeCamera.FreeCameraController),"ClearEffects"),nameof(SpectatorEffects));
         Add(h,AccessTools.Method(typeof(EffectsController),"OnClientPlayerEffectsPauseEvent"),nameof(PauseEffects));
+        PossessionCompatibility.Install(h);
         var sain=AccessTools.TypeByName("SAIN.Components.BotComponent");
         if(sain!=null) Add(h,AccessTools.Method(sain,"ManualUpdate"),nameof(SainTick));
         var takeover=AccessTools.TypeByName("LiveRaid.Client.Spectator.TakeOver");

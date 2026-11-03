@@ -16,10 +16,11 @@ using UnityEngine;
 
 namespace SptDiagnostics.Possession;
 
-[BepInPlugin(Id,"GPTSol6-1-FikaBotPossession","1.0.0")]
+[BepInPlugin(Id,"GPTSol6-1-FikaBotPossession","1.0.1")]
 [BepInDependency("com.fika.core","2.4.6")]
 [BepInDependency("com.lir.liveraid",BepInDependency.DependencyFlags.SoftDependency)]
 [BepInDependency("me.sol.sain",BepInDependency.DependencyFlags.SoftDependency)]
+[BepInDependency("com.mpstark.dynamicmaps",BepInDependency.DependencyFlags.SoftDependency)]
 public sealed class Plugin : BaseUnityPlugin
 {
     public const string Id="com.sptdiagnostics.fikabotpossession";
@@ -29,6 +30,7 @@ public sealed class Plugin : BaseUnityPlugin
     internal Client Client;
     internal ConfigEntry<bool> Allow;
     internal ConfigEntry<KeyCode> TakeKey;
+    internal ConfigEntry<KeyboardShortcut> EndKey;
     internal CoopHandler Coop => Network?.CoopHandler;
     internal bool IsHost => Network is FikaServer;
     internal bool Headless => FikaBackendUtils.IsHeadless;
@@ -41,9 +43,10 @@ public sealed class Plugin : BaseUnityPlugin
     {
         Instance=this;
         if(typeof(FikaPlayer).Assembly.GetName().Version!=new System.Version(2,4,6,0))
-        { Info("1.0.0 requires Fika.Core 2.4.6.0; no hooks installed."); return; }
+        { Info("1.0.1 requires Fika.Core 2.4.6.0; no hooks installed."); return; }
         Allow=Config.Bind("Host","Enable possession",true,"Allow experimental local-player handoff on a dedicated headless host.");
         TakeKey=Config.Bind("Controls","Take over",KeyCode.F6,"Request the bot in the center of the spectator camera.");
+        EndKey=Config.Bind("Controls","End possession",new KeyboardShortcut(KeyCode.F7),"Kill the possessed character and return to freecam, leaving its corpse and items for looting. Does not change your original raid result.");
         Client=new Client(this);
         harmony=new Harmony(Id);
         try { RuntimeContract.Validate(); Hooks.Install(harmony); }
@@ -51,7 +54,7 @@ public sealed class Plugin : BaseUnityPlugin
         FikaEventDispatcher.SubscribeEvent<FikaNetworkManagerCreatedEvent>(Created);
         FikaEventDispatcher.SubscribeEvent<FikaNetworkManagerDestroyedEvent>(Destroyed);
         FikaEventDispatcher.SubscribeEvent<PeerDisconnectedEvent>(Disconnected);
-        Info("1.0.0 loaded. One-way takeover; dedicated host and Fika.Core 2.4.6.0 required.");
+        Info("1.0.1 loaded. One-way takeover; dedicated host and Fika.Core 2.4.6.0 required.");
     }
     void Created(FikaNetworkManagerCreatedEvent e)
     {
